@@ -1,0 +1,8 @@
+proj$
+^\.Rproj\.user$
+^\.travis\.yml$
+^\.github
+src/*.o
+src/*.so:wq
+.Rhistory
+

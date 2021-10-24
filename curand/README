@@ -1,0 +1,33 @@
+## Create RCPP space
+``` 
+R --vanilla -e "Rcpp::Rcpp.package.skeleton('curand-ex')"
+```
+
+## Build and execute container
+
+```
+$ docker-compose build
+$ docker-compose up -d 
+$ docker exec -it rcpp bash
+root@xxxx:/home/workspace#
+```
+
+## Execute R environment
+
+```
+root@xxxx:/home/workspace# R
+```
+
+## Build CUDA samples
+```
+> setwd('./curand/')
+> devtools::document()
+> devtools::check()
+```
+
+## Test CUDA samples
+```
+testMalloc()
+rand_num()
+rcpp_hello_world()
+```

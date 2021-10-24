@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  rcpp:
+    container_name: rcpp
+    image: rcpp
+    build: .
+    command: /bin/bash -c "sleep infinity"
+    runtime: nvidia
+    volumes:
+      - ${HOME_PATH}/rcpp_packages:/home/workspace
+      - ${HOME_PATH}/rcpp:/tmp/rcpp

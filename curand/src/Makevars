@@ -1,0 +1,29 @@
+## R relted paths
+R_INC = /usr/share/R/include
+RCPP_INC = /usr/local/lib/R/site-library/Rcpp/include
+
+## Cuda flags and files
+CUDA_HOME = /usr/local/cuda-10.2
+NVCC = $(CUDA_HOME)/bin/nvcc
+CUDA_INC = -I$(R_INC) -I.
+CUDA_LIB = -L$(CUDA_HOME)/targets/aarch64-linux/lib/ -lcudart -lcurand
+CUDA_FLAGS = -O3 -arch=sm_35 -G -lR --shared -Xcompiler -fPIC 
+cu_sources := $(wildcard *cu)
+cu_sharedlibs := $(patsubst %.cu, %.o,$(cu_sources))
+
+## C++ flags and files
+
+CXX = /usr/bin/g++
+cpp_sources := $(wildcard *.cpp)
+cpp_sharedlibs := $(patsubst %.cpp, %.o, $(cpp_sources))
+
+PKG_LIBS = $(CUDA_LIB) -x cu
+OBJECTS = $(cu_sharedlibs)  $(cpp_sharedlibs)
+all : rcppcuda.so
+rcppcuda.so: $(OBJECTS)
+
+%.o: %.cpp $(cpp_sources)
+			$(CXX) $< -c -fPIC -I$(R_INC) -I$(RCPP_INC) -std=c++11 -I.
+            
+%.o: %.cu $(cu_sources)
+			$(NVCC) $(CUDA_INC) $(CUDA_LIB) $(CUDA_FLAGS) $< -c -std=c++11 -I.
